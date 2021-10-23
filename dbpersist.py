@@ -31,12 +31,10 @@ class DbNfse:
             db = sqlite3.connect(self.__db_name)
             cur = db.cursor()
             rows = cur.execute(query).fetchall()
-
             return rows
         except Exception as err:
             print("db update error")
             print(err)
-            db.rollback()
         finally:
             db.close()
 
@@ -83,6 +81,5 @@ class DbNfse:
         except Exception as err:
             print("db update error")
             print(err)
-            db.rollback()
         finally:
             db.close()
