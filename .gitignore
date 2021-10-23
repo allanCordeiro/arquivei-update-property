@@ -4,6 +4,6 @@
 __pycache__
 venv
 files
-db/localdb.db
+db/db_localdb.db
 
 
