@@ -1,0 +1,9 @@
+.env
+.idea
+.Python
+__pycache__
+venv
+files
+db/localdb.db
+
+
