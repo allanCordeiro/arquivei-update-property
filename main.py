@@ -1,6 +1,7 @@
 import json
 import math
 import logging
+import exceptions
 import apiArquivei
 import dbpersist
 from datetime import datetime
@@ -45,7 +46,7 @@ def get_nfse():
             count += int(nfses['count'])
         else:
             logger.warning(f"O cursor {count} nao trouxe nenhum dado.")
-            raise
+            raise exceptions.CustomHasNoData
 
         db.insert_documents(persist)
     db.update_cursor(count)
@@ -89,6 +90,7 @@ def update_property(body):
         logger.error(f"Erro ao realizar chamada PUT: {err=}")
         raise
 
+
 def validate_failed_docs(failed, docs):
     validated = docs
 
@@ -110,6 +112,7 @@ def persist_status(nfse_list):
 
 
 if __name__ == "__main__":
+    print('iniciando processo.')
     logger.info('Iniciando chamada a API')
     get_nfse()
     logger.info('Consulta a API finalizada')
@@ -139,3 +142,4 @@ if __name__ == "__main__":
     logger.info('Persistindo status no banco de dados')
     persist_status(docs_to_update)
     logger.info('Operacao finalizada')
+    print('processo finalizado. consulte log.')
