@@ -75,6 +75,6 @@ class DbNfse:
                 return 1
             return cursor
         except Exception as err:
-            raise Exception(err)
+            raise
         finally:
             db.close()

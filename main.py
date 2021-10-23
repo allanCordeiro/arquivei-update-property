@@ -9,7 +9,7 @@ from config import Config
 '''logging configuration info
 '''
 log_format = '%(asctime)s:%(levelname)s:%(filename)s:%(message)s'
-logging.basicConfig(filename=f"files/logs/persist{datetime.now().strftime('%Y-%m-%d')}.log",
+logging.basicConfig(filename=f"files/logs/persist-{datetime.now().strftime('%Y-%m-%d')}.log",
                     filemode ='a',
                     level=logging.DEBUG,
                     format=log_format
@@ -24,7 +24,11 @@ def get_nfse():
         Config.get_value('api-key')
     )
 
-    count = db.get_cursor()
+    try:
+        count = db.get_cursor()
+    except Exception as err:
+        logger.error(f"Erro ao obter o cursor no banco de dados: {err}")
+        raise
     while True:
         try:
             nfses = manual_nfse.get_manual_nfses(count)
@@ -41,7 +45,7 @@ def get_nfse():
             count += int(nfses['count'])
         else:
             logger.warning(f"O cursor {count} nao trouxe nenhum dado.")
-            break
+            raise
 
         db.insert_documents(persist)
     db.update_cursor(count)
@@ -52,6 +56,7 @@ def get_documents_to_persist():
         db = dbpersist.DbNfse()
     except Exception as err:
         logger.error(f"Erro ao obter os documentos da tabela nfse: {err=}")
+        raise
 
     return db.get_pendent_documents()
 
@@ -74,12 +79,15 @@ def update_property(body):
         Config.get_value('api-key')
     )
 
-    operation_status_code = received_nfse.put_manual_status(body)
-    if operation_status_code == 200:
-        return received_nfse.failed
-    else:
-        raise Exception(f"Erro HTTP {operation_status_code} ao integar lote. Tente novamente")
-
+    try:
+        operation_status_code = received_nfse.put_manual_status(body)
+        if operation_status_code == 200:
+            return received_nfse.failed
+        else:
+            raise Exception(f"Erro HTTP {operation_status_code} ao integar lote. Tente novamente")
+    except Exception as err:
+        logger.error(f"Erro ao realizar chamada PUT: {err=}")
+        raise
 
 def validate_failed_docs(failed, docs):
     validated = docs
@@ -124,7 +132,7 @@ if __name__ == "__main__":
         except Exception as err:
             logger.error(f'Erro ao realizar operacao PUT na API. {err}')
 
-    logger.info(f"Total de ids de nfses que falharam {len(failed_doc)}")
+    logger.info(f"Total de ids de nfses que falharam: {len(failed_doc)}")
     if len(failed_doc) > 0:
         logger.info(f"Lista: {failed_doc}")
     docs_to_update = validate_failed_docs(failed_doc, pending_docs)
