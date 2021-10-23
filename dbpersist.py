@@ -19,9 +19,8 @@ class DbNfse:
             cur.executemany(query, data)
             db.commit()
         except Exception as err:
-            print("db insert error")
-            print(err)
             db.rollback()
+            raise Exception(err)
         finally:
             db.close()
 
@@ -33,8 +32,7 @@ class DbNfse:
             rows = cur.execute(query).fetchall()
             return rows
         except Exception as err:
-            print("db update error")
-            print(err)
+            raise Exception(err)
         finally:
             db.close()
 
@@ -48,9 +46,8 @@ class DbNfse:
             cur.execute(query, (dt_execution, id_nfse))
             db.commit()
         except Exception as err:
-            print("db update error")
-            print(err)
             db.rollback()
+            raise Exception(err)
         finally:
             db.close()
 
@@ -62,9 +59,8 @@ class DbNfse:
             cur.execute(query, (current_cursor,))
             db.commit()
         except Exception as err:
-            print("db update error")
-            print(err)
             db.rollback()
+            raise Exception(err)
         finally:
             db.close()
 
@@ -79,7 +75,6 @@ class DbNfse:
                 return 1
             return cursor
         except Exception as err:
-            print("db update error")
-            print(err)
+            raise Exception(err)
         finally:
             db.close()

@@ -3,6 +3,7 @@
 .Python
 __pycache__
 venv
+files/logs/*
 db/db_localdb.db
 
 
