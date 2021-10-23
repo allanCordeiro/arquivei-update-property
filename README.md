@@ -36,3 +36,4 @@ https://docs.arquivei.com.br/?urls.primaryName=Arquivei%20API#/nfse/
 - [ ] Possibilitar URL configurável
 - [ ] Possibilitar property configurável
 - [ ] Possibilitar valor da property configurável
+- [ ] Refatoração

@@ -1,3 +1,4 @@
+import os
 import json
 import math
 import logging
@@ -9,14 +10,17 @@ from config import Config
 
 '''logging configuration info
 '''
+path = os.path.dirname(os.path.abspath(__file__))
 log_format = '%(asctime)s:%(levelname)s:%(filename)s:%(message)s'
-logging.basicConfig(filename=f"files/logs/persist-{datetime.now().strftime('%Y-%m-%d')}.log",
+logging.basicConfig(filename=f"{path}/files/logs/persist-{datetime.now().strftime('%Y-%m-%d')}.log",
                     filemode ='a',
                     level=logging.DEBUG,
-                    format=log_format
+                    format=log_format,
+                    force=True
                     )
 logger = logging.getLogger('root')
-
+'''
+'''
 
 def get_nfse():
     db = dbpersist.DbNfse()

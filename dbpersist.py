@@ -6,10 +6,11 @@ from datetime import datetime
 
 class DbNfse:
     def __init__(self):
-        if not os.path.isfile('db/db_localdb.db'):
-            copyfile('db/bkp_localdb.db', 'db/db_localdb.db')
+        path = os.path.dirname(os.path.abspath(__file__))
+        if not os.path.isfile(path + '/db/db_localdb.db'):
+            copyfile(path + '/db/bkp_localdb.db', path + '/db/db_localdb.db')
 
-        self.__db_name = 'db/db_localdb.db'
+        self.__db_name = f'{path}/db/db_localdb.db'
 
     def insert_documents(self, data):
         query = "INSERT INTO nfses (nfsehash, persiststatus, dtcreation) VALUES(?,?,?);"
