@@ -48,11 +48,13 @@ def get_nfse():
                 persist.append((nfse['id'], 0, dt_creation))
             logger.info(f"Execucao no cursor {count} concluido")
             count += int(nfses['count'])
+            db.insert_documents(persist)
         else:
             logger.warning(f"O cursor {count} nao trouxe nenhum dado.")
-            raise exceptions.CustomHasNoData
+            break
+            # raise exceptions.CustomHasNoData
 
-        db.insert_documents(persist)
+
     db.update_cursor(count)
 
 
